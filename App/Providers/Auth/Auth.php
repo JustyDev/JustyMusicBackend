@@ -17,7 +17,7 @@ class Auth extends Provider
   public function route(): void
   {
     match (Net::path()->get(1)) {
-      'register' => $this->put($this->register(...))
+      'register' => $this->get($this->register(...))
     };
   }
 
@@ -34,7 +34,7 @@ class Auth extends Provider
     $last_code = Code::lastCode($phone_number, CodeTypes::PHONE_NUMBER);
 
     ErrorBuilder::i('Подождите немного, прежде чем снова отправлять код')
-      ->if($last_code->getCreatedTime() + 60 > time())->build();
+      ->if($last_code && $last_code->getCreatedTime() + 60 > time())->build();
 
     $code = SMSCenter::callCode($phone_number);
     ErrorBuilder::i('Ошибка при отправке кода, попробуйте позже')->if(!$code)->build();
@@ -43,7 +43,7 @@ class Auth extends Provider
 
     Response::set([
       'type' => 'success',
-      'phone_number' => $phone_number
+      'phone_number' => SUtils::formatPhoneNumber($phone_number)
     ]);
   }
 }
