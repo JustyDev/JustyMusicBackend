@@ -9,14 +9,19 @@
     }
   ],
   "require": {
-    "php": ">=8.2"
+    "php": ">=8.2",
+    "ext-curl": "*",
+    "ext-pdo": "*"
   },
   "autoload": {
     "psr-4": {
       "App\\Providers\\": "App/Providers",
-
+      "App\\Config\\": "App/Config",
+      "App\\Objects\\": "App/Objects",
       "App\\Providers\\Utils\\": "App/Providers/Utils",
-      "App\\Providers\\Entry\\": "App/Providers/Entry"
+      "App\\Providers\\Utils\\Database\\": "App/Providers/Utils/Database",
+      "App\\Providers\\Entry\\": "App/Providers/Entry",
+      "App\\Providers\\External\\": "App/Providers/External"
     }
   }
 }
