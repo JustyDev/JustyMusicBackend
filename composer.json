@@ -1,0 +1,22 @@
+{
+  "name": "justymusic/backend",
+  "description": "Music - enjoy.",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Dmitry",
+      "email": "me@justydev.ru"
+    }
+  ],
+  "require": {
+    "php": ">=8.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\Providers\\": "App/Providers",
+
+      "App\\Providers\\Utils\\": "App/Providers/Utils",
+      "App\\Providers\\Entry\\": "App/Providers/Entry"
+    }
+  }
+}
