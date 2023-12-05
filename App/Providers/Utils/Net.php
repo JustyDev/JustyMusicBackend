@@ -36,7 +36,7 @@ class Net
   public static function param(string $name): mixed
   {
     if (!isset(self::$data)) {
-      self::$data = json_decode(file_get_contents('php://input'));
+      self::$data = json_decode(file_get_contents('php://input')) ?: ((object) []);
     }
 
     return self::$data?->$name ?: false;
