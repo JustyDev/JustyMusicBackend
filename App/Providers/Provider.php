@@ -35,7 +35,7 @@ abstract class Provider
 
   private function acceptedMethod(NetMethodsEnum $method): void
   {
-    ErrorBuilder::i('Не верный метод')
+    ErrorBuilder::i('HTTP Метод не корректный для этого запроса.')
       ->if($method->value !== strtoupper($_SERVER['REQUEST_METHOD']))
       ->build();
   }

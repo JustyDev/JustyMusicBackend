@@ -54,4 +54,31 @@ class Code
   {
     return $this->created_time;
   }
+
+  public static function areValid(string $code, int $digits = 6): bool
+  {
+    if (empty($code) || strlen($code) !== $digits) return false;
+
+    return true;
+  }
+
+  public static function isExist(string $recipient, CodeTypes $type, string $code): bool
+  {
+    return QueryBuilder::i()
+      ->query("SELECT * FROM `codes` WHERE recipient = ? AND code = ? AND recipient_type = ? AND (created_time + 3600) > ?")
+      ->bindString($recipient)
+      ->bindString($code)
+      ->bindInt($type->value)
+      ->bindInt(time())
+      ->asExist();
+  }
+
+  public static function clear(string $recipient, CodeTypes $type): void
+  {
+    QueryBuilder::i()
+      ->query("DELETE FROM `codes` WHERE recipient = ? AND recipient_type = ?")
+      ->bindString($recipient)
+      ->bindInt($type->value)
+      ->delete();
+  }
 }

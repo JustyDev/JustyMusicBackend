@@ -26,7 +26,7 @@ class ErrorBuilder
     return $this;
   }
 
-  public function if(int $condition): ErrorBuilder
+  public function if(mixed $condition): ErrorBuilder
   {
     if (!$condition) return new EmptyErrorBuilder();
     return $this;

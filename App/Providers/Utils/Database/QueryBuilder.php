@@ -110,6 +110,11 @@ class QueryBuilder
       ->fetchObject($namespace) ?: null;
   }
 
+  public function asExist(): bool
+  {
+    return $this->execute()->rowCount() > 0;
+  }
+
   public function asClassArray($namespace): array
   {
     return $this
@@ -121,6 +126,11 @@ class QueryBuilder
   {
     $this->execute();
     return Database::get()->lastInsertId() ?: null;
+  }
+
+  public function delete(): void
+  {
+    $this->execute();
   }
 
 }

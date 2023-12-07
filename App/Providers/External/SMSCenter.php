@@ -30,7 +30,7 @@ class SMSCenter
 
   }
 
-  public static function callCode(string $number, int $digits = 6): ?string
+  public static function callCode(string $number, int $digits = 5): ?string
   {
 
     $code = IUtils::genCode($digits);
