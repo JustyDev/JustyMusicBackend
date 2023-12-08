@@ -41,12 +41,8 @@ class Auth extends Provider
 
     $user = User::findByNumber($phone_number);
 
-    ErrorBuilder::i('Такого пользователя не существует')
-      ->if(!$user)
-      ->build();
-
-    ErrorBuilder::i('Такого пользователя не существует')
-      ->if(!UserPassword::equals($password, $user->getPassword()))
+    ErrorBuilder::i('Неправильный логин или пароль')
+      ->if(!$user || !UserPassword::equals($password, $user->getPassword()))
       ->build();
 
      //TODO: AUTO SELECT SESSION TYPE
