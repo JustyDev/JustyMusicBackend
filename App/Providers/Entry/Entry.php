@@ -3,7 +3,9 @@
 namespace App\Providers\Entry;
 
 use App\Providers\Auth\Auth;
+use App\Providers\Playlists\Playlists;
 use App\Providers\Provider;
+use App\Providers\Tracks\Tracks;
 use App\Providers\Utils\ErrorBuilder;
 use App\Providers\Utils\Net;
 
@@ -56,6 +58,8 @@ final class Entry
   {
     $provider = match (Net::path()->get(0)) {
       'auth' => new Auth(),
+      'tracks' => new Tracks(),
+      'playlists' => new Playlists(),
       default => false
     };
 
@@ -63,7 +67,9 @@ final class Entry
       ->if(!($provider instanceof Provider))
       ->build();
 
-    $provider->route();
+    $provider->register();
+
+    ErrorBuilder::i('Запрос не найден')->build();
 
   }
 }

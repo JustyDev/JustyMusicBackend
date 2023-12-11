@@ -8,4 +8,14 @@ enum NetMethodsEnum: string
   case POST = "POST";
   case PUT = "PUT";
   case DELETE = "DELETE";
+
+  public function equals(NetMethodsEnum $method): bool
+  {
+    return $this->value === strtoupper($method->value);
+  }
+
+  public function isReal(): bool
+  {
+    return $this->equals(Net::method());
+  }
 }

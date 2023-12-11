@@ -26,6 +26,14 @@ class Session
       ->asClass('\App\Objects\Session');
   }
 
+  public static function findByKey(string $key): ?Session
+  {
+    return QueryBuilder::i()
+      ->query("SELECT * FROM `sessions` WHERE `key` = ?")
+      ->bindString($key)
+      ->asClass('\App\Objects\Session');
+  }
+
   public static function create(User $user, SessionTypes $type = SessionTypes::WEB_BROWSER, int $expires = 0): ?Session
   {
     $t = time();
@@ -47,6 +55,16 @@ class Session
   public function getId(): int
   {
     return $this->id;
+  }
+
+  public function getUserId(): int
+  {
+    return $this->user_id;
+  }
+
+  public function getUser(): User
+  {
+    return User::findById($this->getId());
   }
 
   public function getKey(): string

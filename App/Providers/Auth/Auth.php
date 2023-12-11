@@ -12,20 +12,20 @@ use App\Providers\Provider;
 use App\Providers\Utils\ErrorBuilder;
 use App\Providers\Utils\IUtils;
 use App\Providers\Utils\Net;
+use App\Providers\Utils\NetMethodsEnum;
 use App\Providers\Utils\Response;
 use App\Providers\Utils\SUtils;
 
 class Auth extends Provider
 {
 
-  public function route(): void
+  public function register(): void
   {
-    match (Net::path()->get(1)) {
-      'register' => $this->post($this->register(...)),
-      'register.silent' => $this->put($this->checkCode(...)),
-      'register.complete' => $this->post($this->registerComplete(...)),
-      'login' => $this->post($this->login(...))
-    };
+    $this->route('register', NetMethodsEnum::GET, $this->registerAccount(...), false);
+    $this->route('register', NetMethodsEnum::PUT, $this->checkCode(...), false);
+    $this->route('register', NetMethodsEnum::POST, $this->registerComplete(...), false);
+
+    $this->route('login', NetMethodsEnum::POST, $this->login(...), false);
   }
 
   private function login(): void
@@ -51,6 +51,7 @@ class Auth extends Provider
     Response::set([
       'id' => $user->getId(),
       'username' => $user->getUsername(),
+      'number' => SUtils::formatPhoneNumber($user->getNumber()),
       'session' => [
         'id' => $session->getId(),
         'key' => $session->getKey(),
@@ -130,7 +131,7 @@ class Auth extends Provider
     ]);
   }
 
-  private function register(): void
+  private function registerAccount(): void
   {
 
     $phone_number = Net::param('phone_number');

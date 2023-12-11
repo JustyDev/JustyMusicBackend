@@ -2,46 +2,36 @@
 
 namespace App\Providers;
 
+use App\Objects\AuthorizedUser;
+use App\Objects\Session;
 use App\Providers\Utils\ErrorBuilder;
+use App\Providers\Utils\Net;
 use App\Providers\Utils\NetMethodsEnum;
 
 abstract class Provider
 {
-  abstract public function route();
+  abstract public function register();
 
-  public function get(callable $func): void
+  public function route(string $name, NetMethodsEnum $method, callable $func, bool $authed = true, int $path_index = 1): void
   {
-    $this->acceptedMethod(NetMethodsEnum::GET);
-    $this->processing($func);
-  }
+    if (Net::path()->get($path_index) === $name && $method->isReal()) {
 
-  public function post(callable $func): void
-  {
-    $this->acceptedMethod(NetMethodsEnum::POST);
-    $this->processing($func);
-  }
+      if ($authed) {
 
-  public function put(callable $func): void
-  {
-    $this->acceptedMethod(NetMethodsEnum::PUT);
-    $this->processing($func);
-  }
+        $access_token = Net::getAccessToken();
+        $session = Session::findByKey($access_token);
 
-  public function delete(callable $func): void
-  {
-    $this->acceptedMethod(NetMethodsEnum::DELETE);
-    $this->processing($func);
-  }
+        ErrorBuilder::i("Вам необходимо авторизоваться для получения этих данных")
+          ->if(!$session)
+          ->build();
 
-  private function acceptedMethod(NetMethodsEnum $method): void
-  {
-    ErrorBuilder::i('HTTP Метод не корректный для этого запроса.')
-      ->if($method->value !== strtoupper($_SERVER['REQUEST_METHOD']))
-      ->build();
-  }
+        $func(AuthorizedUser::i($session));
 
-  private function processing(callable $func): void
-  {
-    $func();
+        exit;
+      }
+
+      $func();
+      exit;
+    }
   }
 }

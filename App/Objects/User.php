@@ -7,15 +7,15 @@ use App\Providers\Utils\Net;
 
 class User
 {
-  private int $id;
-  private string $number;
-  private string $username;
-  private string $password;
-  private string $reg_ip;
-  private string $last_ip;
+  protected int $id;
+  protected string $number;
+  protected string $username;
+  protected string $password;
+  protected string $reg_ip;
+  protected string $last_ip;
 
-  private int $reg_time;
-  private int $last_active;
+  protected int $reg_time;
+  protected int $last_active;
 
   public function getId(): int
   {
@@ -73,6 +73,11 @@ class User
   public function getUsername(): string
   {
     return $this->username;
+  }
+
+  public function getNumber(): string
+  {
+    return $this->number;
   }
 
   public function getPassword(): string

@@ -2,6 +2,8 @@
 
 namespace App\Providers\Utils;
 
+use Exception;
+
 class Net
 {
   private static object $data;
@@ -14,6 +16,16 @@ class Net
   public static function setHeader(string $name, string $value): void
   {
     header($name . ': ' . $value);
+  }
+
+  public static function getHeaderValue(string $headerName): string|false
+  {
+    $headers = getallheaders();
+    $headers = array_change_key_case($headers);
+
+    $headerName = strtolower($headerName);
+
+    return trim($headers[$headerName]) ?: false;
   }
 
   public static function removeRepeatHeaders(array $headers): array
@@ -33,13 +45,28 @@ class Net
     return $r_arr;
   }
 
+  public static function method(): NetMethodsEnum
+  {
+    return NetMethodsEnum::from($_SERVER['REQUEST_METHOD']);
+  }
+
   public static function param(string $name): mixed
   {
-    if (!isset(self::$data)) {
-      self::$data = json_decode(file_get_contents('php://input')) ?: ((object) []);
-    }
+    try {
 
-    return self::$data?->$name ?: false;
+      if (Net::method()->equals(NetMethodsEnum::GET)) {
+        return $_GET[$name] ?: null;
+      }
+
+      if (!isset(self::$data)) {
+        self::$data = json_decode(file_get_contents('php://input')) ?: ((object)[]);
+      }
+
+      return self::$data?->$name ?: null;
+
+    } catch (Exception) {
+      return null;
+    }
   }
 
   public static function ip(): string
@@ -53,5 +80,20 @@ class Net
     }
 
     return $ip;
+  }
+
+  public static function getAccessToken(): ?string
+  {
+    $token = trim($_COOKIE['AccessToken']);
+
+    if (!$token) {
+      $token = Net::getHeaderValue('AccessToken');
+    }
+
+    if (!$token) {
+      $token = Net::param('access_token');
+    }
+
+    return trim($token) ?: null;
   }
 }
