@@ -14,6 +14,7 @@ set_error_handler(function ($error_type, $error_message, $filename, $line_number
 
     ErrorBuilder::i('Ошибка исполнения сервера. Запрос не выполнен')
       ->setCode(-15)
+      ->setHttpCode(200)
       ->cleanBuffer()
       ->attach('info', [
         'type' => $error_type,
@@ -41,6 +42,7 @@ register_shutdown_function(function () {
 
       ErrorBuilder::i('Сервис временно недоступен')
         ->setCode(-10)
+        ->setHttpCode(200)
         ->cleanBuffer()
         ->attach('debug_id', $error)
         ->build();
@@ -49,6 +51,7 @@ register_shutdown_function(function () {
 
       ErrorBuilder::i('Сервис временно недоступен')
         ->setCode(-100)
+        ->setHttpCode(200)
         ->cleanBuffer()
         ->attach('info', $error)
         ->build();

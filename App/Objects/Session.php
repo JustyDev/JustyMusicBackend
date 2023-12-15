@@ -26,8 +26,9 @@ class Session
       ->asClass('\App\Objects\Session');
   }
 
-  public static function findByKey(string $key): ?Session
+  public static function findByKey(?string $key): ?Session
   {
+    if (!$key) return null;
     return QueryBuilder::i()
       ->query("SELECT * FROM `sessions` WHERE `key` = ?")
       ->bindString($key)
@@ -64,7 +65,7 @@ class Session
 
   public function getUser(): User
   {
-    return User::findById($this->getId());
+    return User::findById($this->getUserId());
   }
 
   public function getKey(): string

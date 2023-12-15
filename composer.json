@@ -11,7 +11,8 @@
   "require": {
     "php": ">=8.2",
     "ext-curl": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-imagick": "*"
   },
   "autoload": {
     "psr-4": {

@@ -10,6 +10,7 @@ class Track
   private string $title;
   private string $performers;
   private string $hash;
+  private string $picture_hash;
   private bool $is_explicit;
 
   public function getId(): int
@@ -30,6 +31,11 @@ class Track
   public function getHash(): string
   {
     return $this->hash;
+  }
+
+  public function getPictureHash(): string
+  {
+    return $this->picture_hash;
   }
 
   public function isExplicit(): bool
@@ -60,6 +66,15 @@ class Track
   {
     $hash = $this->getHash();
     $path = "/home/www/web/cdn.justydev.ru/music/";
+    $path_folder = $path . substr($hash, 0, 2) . '/';
+    if (!file_exists($path_folder)) mkdir($path_folder);
+    return $path_folder . $hash;
+  }
+
+  public function getPictureLocalPath(): string
+  {
+    $hash = $this->getPictureHash();
+    $path = "/home/www/web/cdn.justydev.ru/pictures/";
     $path_folder = $path . substr($hash, 0, 2) . '/';
     if (!file_exists($path_folder)) mkdir($path_folder);
     return $path_folder . $hash;

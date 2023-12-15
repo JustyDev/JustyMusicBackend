@@ -24,7 +24,7 @@ class AuthorizedUser
 
   public function getUser(): User
   {
-    if (!isset($this->user)) $this->user = $this->session->getUser();
+    if (!isset($this->user)) $this->user = $this->getSession()->getUser();
     return $this->user;
   }
 }
